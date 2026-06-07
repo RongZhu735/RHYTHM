@@ -27,7 +27,6 @@ class SASRec(nn.Module):
 
         if self.learnable_intent:
             self.time_mask_weights = nn.Parameter(torch.randn(1, args.maxlen, args.maxlen) * 0.01)
-            self.softmax = nn.Softmax(dim=2)
 
         self.embedding = Embedding(itemnum + 1, args.hidden_units, zero_pad=True, scale=True)
         self.register_buffer("positional_encoding", positional_encoding(args.hidden_units, args.maxlen), persistent=False)
@@ -118,10 +117,8 @@ class SASRec(nn.Module):
 
         if self.learnable_intent:
             weights = self.time_mask_weights[:, :seq_len, :seq_len].to(seq_emb.device)
-            weighted_mask = weights.masked_fill(structure_mask == 0, float("-inf"))
-            weighted_mask = self.softmax(weighted_mask)
-            # Keep the legacy behavior for old checkpoints: the original code
-            # computed softmax but then used raw learnable weights under the mask.
+            # Keep the legacy behavior for old checkpoints: use raw learnable
+            # weights under the periodic-causal structure mask.
             weighted_mask = weights * structure_mask
             return torch.matmul(weighted_mask, seq_emb)
 
