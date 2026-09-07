@@ -73,4 +73,3 @@ These scripts use full-item evaluation. The deprecated `candidate_num` argument 
 
 Additional experiments on robustness under short interaction histories are available in the supplementary folder.
 
-The analysis evaluates RHYTHM, TCPSRec, and TALE across different visible-history-length groups on Ta-Feng, DHRD, and MegaMarket. It reports NDCG@10, HR@10, and non-empty phase ratios, examining how recommendation performance and relative gains vary with the amount of available behavioral history.
